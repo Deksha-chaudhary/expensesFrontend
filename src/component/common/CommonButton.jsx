@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CommonButton = ({name,onClick,className}) => {
 
   return (

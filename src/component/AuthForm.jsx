@@ -1,8 +1,31 @@
 import { Link } from "react-router-dom";
 import CommonButton from "./common/CommonButton";
+import CommonInput from "./common/CommonInput";
+import { useState } from "react";
 
-const AuthForm = (props) => {
+const initialData={
+  name:"",
+  email:"",
+  password:""
+}
+  const AuthForm = (props) => {
   const isSignup = props?.mode === "signup";
+   const[formData,setFormData]=useState(initialData);
+   const[formError,setFormError]=useState({...initialData,global:""});
+   const[loading,setLoading]=useState(false);
+
+
+   function ValidateForm(){
+    // form validate and return form valid==false other true
+   }
+
+   const handleSubmit=(e)=>{
+    e.preventDefault()
+    if(ValidateForm()){
+      return;
+    }
+    console.log("submitclick")
+   }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -22,61 +45,56 @@ const AuthForm = (props) => {
           {/* Form */}
           <form className="space-y-5">
 
-            {/* Email */}
-            <div>
-              {isSignup && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter your name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                  />
-                </div>
-              )}
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            {isSignup && (
+              <CommonInput
+                label="Name"
+                value={formData.name}
+                error={formError.name}
+                name="name"
+                type="text"
+                placeholder="Enter your name"
+                autoComplete="name"
+                required
               />
-            </div>
+            )}
 
+            <CommonInput
+              label="Email"
+              value={formData.email}
+              error={formError.email}
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              autoComplete="email"
+              required
+            />
 
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-
-                {!isSignup && (
+            <CommonInput
+              label="Password"
+              value={formData.password}
+              error={formError.password}
+              labelAction={
+                !isSignup && (
                   <Link
                     to="/forgot"
                     className="text-sm text-blue-600 hover:underline"
                   >
                     Forgot Password?
                   </Link>
-                )}
-              </div>
-
-              <input
-                type="password"
-                placeholder="Enter your password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
-            </div>
+                )
+              }
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              autoComplete={isSignup ? "new-password" : "current-password"}
+              required
+            />
 
             {/* Login Button */}
             <CommonButton
-
-                className="bg-red-500"
+              className="bg-red-500"
               name={isSignup ? "Sign Up" : "Login"}
-              onClick={() => alert("Hii")}
+              onClick={(e) => handleSubmit(e)}
             />
           </form>
 

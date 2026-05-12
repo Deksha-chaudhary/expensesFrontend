@@ -1,5 +1,4 @@
 import AuthForm from '../AuthForm'
-import Header from '../Header'
 
 const Login = () => {
   return (
