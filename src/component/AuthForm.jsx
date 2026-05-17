@@ -7,21 +7,70 @@ const initialData={
   name:"",
   email:"",
   password:""
+
+
 }
+
+
   const AuthForm = (props) => {
   const isSignup = props?.mode === "signup";
    const[formData,setFormData]=useState(initialData);
    const[formError,setFormError]=useState({...initialData,global:""});
    const[loading,setLoading]=useState(false);
 
+  function ValidateForm() {
+  let isValid = true;
 
-   function ValidateForm(){
-    // form validate and return form valid==false other true
-   }
+const error={...initialData,global:""};
+
+  // Email Regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Signup Validation
+  if (isSignup) {
+    if (!formData?.name?.trim()) {
+      error.name = "Name is required";
+      isValid = false;
+    }
+  }
+
+  // Common Validation (Login + Signup)
+  if (!formData?.email?.trim()) {
+    error.email = "Email is required";
+    isValid = false;
+  } else if (!emailRegex.test(formData.email)) {
+    error.email = "Please enter a valid email";
+    isValid = false;
+  }
+
+  if (!formData?.password?.trim()) {
+    error.password = "Password is required";
+    isValid = false;
+  }
+
+  setFormError(error);
+
+  return isValid;
+  }
+
+ const handleChange=(e,key)=>{
+  let value=e.target.value;
+  let id=e.target.id;
+  console.log('aaa',id,value)
+  
+  setFormData((p)=>({
+    ...p,
+    [id]:value,
+  }))
+   setFormError((p)=>({
+    ...p,
+    [id]:'',
+  }))
+ }
 
    const handleSubmit=(e)=>{
     e.preventDefault()
-    if(ValidateForm()){
+    if(!ValidateForm()){
       return;
     }
     console.log("submitclick")
@@ -47,6 +96,11 @@ const initialData={
 
             {isSignup && (
               <CommonInput
+              // onChange={(e)=>{
+              //   handleChange(e,'name')
+              // }}
+              onChange={handleChange}
+              id='name'
                 label="Name"
                 value={formData.name}
                 error={formError.name}
@@ -59,6 +113,8 @@ const initialData={
             )}
 
             <CommonInput
+             onChange={handleChange}
+              id='email'
               label="Email"
               value={formData.email}
               error={formError.email}
@@ -70,6 +126,8 @@ const initialData={
             />
 
             <CommonInput
+              onChange={handleChange}
+              id='password'
               label="Password"
               value={formData.password}
               error={formError.password}
